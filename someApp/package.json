@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "@types/node": "^16.7.1",
+    "aws-sdk": "^2.975.0",
+    "uuid": "^8.3.2"
+  },
+  "name": "someapp",
+  "description": "A simple Node.js application illustrating usage of the SDK for JavaScript.",
+  "version": "1.0.1",
+  "main": "testAws.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "franber",
+  "private": true,
+  "license": "UNLICENSED"
+}
