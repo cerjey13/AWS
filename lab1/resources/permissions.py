@@ -11,4 +11,4 @@ S3API.put_bucket_policy(
     Bucket = bucket_name,
     Policy = policy_file.read()
 )
-print ("DONE")
+print ("Setting Permissions - DONE")
