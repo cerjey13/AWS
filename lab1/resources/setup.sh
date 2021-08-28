@@ -43,36 +43,46 @@ sed -i "s/<FMI_2>/$ip_address/g" $FILE_PATH
 #sed -i "s/<FMI_3>/$ip_address/g" $FILE_PATH
 sed -i "s/<FMI>/$bucket/g" $FILE_PATH_2
 python3 /mnt/e/Git/AWS/lab1/resources/permissions.py
-POOL_ID=`aws cognito-idp list-user-pools --max-results 1 | grep Id | tr -d ':,' | sed -e 's/Id//g' | xargs`
-NUMBER=$(cat /dev/urandom | tr -dc '0-9' | fold -w 256 | head -n 1 | sed -e 's/^0*//' | head --bytes 4)
-if [ "$NUMBER" == "" ]; then
-  NUMBER=0
-fi
-aws cognito-idp update-user-pool --user-pool-id $POOL_ID --account-recovery-setting 'RecoveryMechanisms=[{Priority=1,Name=verified_email}]' \
---admin-create-user-config 'AllowAdminCreateUserOnly=true'
-aws cognito-idp admin-create-user --user-pool-id $POOL_ID \
---username cerj \
---temporary-password "!FooBar55" \
---user-attributes Name=email,Value=$email_address Name=email_verified,Value=true Name=phone_number_verified,Value=true Name=phone_number,Value="+58$phone_number" \
---desired-delivery-mediums EMAIL \
---message-action SUPPRESS
-aws cognito-idp create-user-pool-domain --user-pool-id $POOL_ID --domain fancy$NUMBER-domain 
-aws cognito-idp create-user-pool-client \
---user-pool-id $POOL_ID  --client-name FancyApp \
---no-generate-secret --explicit-auth-flows "ALLOW_REFRESH_TOKEN_AUTH" \
---allowed-o-auth-flows-user-pool-client \
---supported-identity-providers COGNITO \
---prevent-user-existence-errors ENABLED \
---callback-urls '["https://'$bucket'.s3-us-west-2.amazonaws.com/callback.html"]' \
---logout-urls '["https://'$bucket'.s3-us-west-2.amazonaws.com/sign-out.html"]' \
---allowed-o-auth-flows implicit \
---allowed-o-auth-scopes "openid" "profile" 
-aws cognito-idp admin-set-user-password --user-pool-id $POOL_ID --username cerj --password "!FooBar55" --permanent
-CLIENT_ID=`aws cognito-idp list-user-pool-clients --user-pool-id $POOL_ID | grep ClientId | cut -f2- -d: | tr -d ',' | xargs`
-# crear url desde 0
+## crear url desde 0
+# POOL_ID=`aws cognito-idp list-user-pools --max-results 1 | grep Id | tr -d ':,' | sed -e 's/Id//g' | xargs`
+# NUMBER=$(cat /dev/urandom | tr -dc '0-9' | fold -w 256 | head -n 1 | sed -e 's/^0*//' | head --bytes 4)
+# if [ "$NUMBER" == "" ]; then
+#   NUMBER=0
+# fi
+# aws cognito-idp update-user-pool --user-pool-id $POOL_ID --account-recovery-setting 'RecoveryMechanisms=[{Priority=1,Name=verified_email}]' \
+# --admin-create-user-config 'AllowAdminCreateUserOnly=true'
+# aws cognito-idp admin-create-user --user-pool-id $POOL_ID \
+# --username inw \
+# --temporary-password "!FooBar55" \
+# --user-attributes Name=email,Value=$email_address Name=email_verified,Value=true Name=phone_number_verified,Value=true Name=phone_number,Value="+526645383320" \
+# --desired-delivery-mediums EMAIL \
+# --message-action SUPPRESS
+# --username inw \
+# --temporary-password "!FooBar55" \
+# --user-attributes Name=email,Value='tinguerd@gmail.com' Name=email_verified,Value=true Name=phone_number_verified,Value=true Name=phone_number,Value="+526645383320" \
+# --desired-delivery-mediums EMAIL \
+# --message-action SUPPRESS
+# aws cognito-idp create-user-pool-domain --user-pool-id $POOL_ID --domain fancy$-domain 
+# aws cognito-idp create-user-pool-client \
+# --user-pool-id $POOL_ID  --client-name FancyApp \
+# --no-generate-secret --explicit-auth-flows "ALLOW_REFRESH_TOKEN_AUTH" \
+# --allowed-o-auth-flows-user-pool-client \
+# --supported-identity-providers COGNITO \
+# --prevent-user-existence-errors ENABLED \
+# --callback-urls '["https://'$bucket'.s3-us-west-2.amazonaws.com/callback.html"]' \
+# --logout-urls '["https://'$bucket'.s3-us-west-2.amazonaws.com/sign-out.html"]' \
+# --allowed-o-auth-flows implicit \
+# --allowed-o-auth-scopes "openid" "profile" 
+# aws cognito-idp admin-set-user-password --user-pool-id $POOL_ID --username cerj --password "!FooBar55" --permanent
+# CLIENT_ID=`aws cognito-idp list-user-pool-clients --user-pool-id $POOL_ID | grep ClientId | cut -f2- -d: | tr -d ',' | xargs`
 # COG_STRING="https://fancy${NUMBER}-domain.auth.us-west-2.amazoncognito.com/login?client_id=${CLIENT_ID}\&response_type=token\&scope=openid+profile\&redirect_uri=https://${bucket}.s3-us-west-2.amazonaws.com/callback.html"
 # GW_STRING="https://${apigateway}.execute-api.us-west-2.amazonaws.com/test"
 # sed -i 's~G_COGNITO_HOSTED_URL_STR = null~G_COGNITO_HOSTED_URL_STR = \"'$COG_STRING'\"~' $FILE_PATH_4
 # sed -i 's~G_API_GW_URL_STR = null~G_API_GW_URL_STR = \"'$GW_STRING'\"~' $FILE_PATH_4
-aws s3 cp /mnt/e/Git/AWS/lab1/resources/website/config.js s3://$bucket/config.js
+# aws s3 cp /mnt/e/Git/AWS/lab1/resources/website/config.js s3://$bucket/config.js
+# zip -j /mnt/e/Git/AWS/lab1/resources/index.zip /mnt/e/Git/AWS/lab1/resources/index.js
+# aws lambda update-function-code --function-name validate --zip-file fileb:///mnt/e/Git/AWS/lab1/resources/index.zip
+# zip -j /mnt/e/Git/AWS/lab1/resourcescreate_pre_signed_url.zip /mnt/e/Git/AWS/lab1/resourcescreate_pre_signed_url.js
+# aws lambda update-function-code --function-name create_pre_signed_url --zip-file fileb://create_pre_s
+# igned_url.zip
 echo DONE
