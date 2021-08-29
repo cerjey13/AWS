@@ -1,8 +1,8 @@
 exports.handler = function(event, context, callback){
 	var 
 		result_boo = false,
-		safe_cellphone_str = "+584241047058",
-		safe_ipv4_str = "190.205.181.34";
+		safe_cellphone_str = "$$$",
+		safe_ipv4_str = "$$$";
 
     // as we add more manager we would modify the validation code
      if(event.cellphone_str && event.ipv4_str){
